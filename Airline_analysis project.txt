@@ -1,0 +1,51 @@
+
+use thor;
+=========================Airport======================================================
+
+CREATE TABLE Airport (Airport_ID int, Name String, City String, Country String, IATA_FAA String,ICAO String, Latitude double,
+Longitude double, Altitude int ,Timezone int, DST String,Tz String) Row format delimited Fields terminated by ',';
+
+load data local inpath '/mnt/home/edureka_666227/airports_mod.dat' into table Airport;
+
+========================Routes=======================================================
+
+CREATE TABLE Routes (Airline_code String, Airline_ID int, Source_Airport String, Source_Airport_ID int,
+Destination_Airport String,Destination_Airport_ID int, codeshare String, Stops int, Equipment String ) 
+Row format delimited Fields terminated by ',';
+
+load data local inpath '/mnt/home/edureka_666227/routes.dat' into table Routes;
+
+=======================Final_airlines=================================================
+
+CREATE TABLE Final_airlines (Airline_Id int, Name String, Alias String, IATA String, ICAO String,
+Callsign String, Country String, Active String ) Row format delimited Fields terminated by ',';
+
+load data local inpath '/mnt/home/edureka_666227/Final_airlines' into table Final_airlines;
+
+=============================================================================================
+
+A.) Find list of Airport operating in the Country India
+
+==> select name from Airport where country ='India';
+
+------------------------------------------------------------------------
+B.)Find the list of Airlines having zero stops.
+
+==> select distinct f.name from final_airlines f inner join routes r on f.airline_id = r.airline_id where r.stops=0;
+
+-------------------------------------------------------------------------
+C.)List of Airlines operating with code share.
+
+==> select distinct f.name from final_airlines f inner join routes r on f.airline_id=r.airline_id where codeshare='Y';
+
+------------------------------------------------------------------------- 
+D.) Which country (or) territory having highest Airports.
+
+==> select country, count(*) as A from airport group by country order by A desc limit 1;
+ 
+----------------------------------------------------------------------
+
+E.) Find the list of Active Airlines in United states
+
+==> select distinct name from final_airlines where active ='Y' and country= "United States";
+
